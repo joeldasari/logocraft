@@ -46,31 +46,31 @@ export const colorPalettes = [
 
 export const logoDesigns = [
   {
-    name: "Cartoon Logo",
+    name: "Cartoon",
     image: "/design-1.webp",
   },
   {
-    name: "App Logo",
+    name: "Game",
     image: "/design-2.webp",
   },
   {
-    name: "Modern Logo",
+    name: "Modern",
     image: "/design-3.webp",
   },
   {
-    name: "B&W Logo",
+    name: "Black and White",
     image: "/design-4.webp",
   },
   {
-    name: "Minimalist Logo",
+    name: "Minimalist",
     image: "/design-5.webp",
   },
   {
-    name: "Vintage Logo",
+    name: "Vintage",
     image: "/design-6.webp",
   },
   {
-    name: "Luxury Logo",
+    name: "Luxury",
     image: "/design-7.webp",
   },
 ];
@@ -80,6 +80,4 @@ export const examples = [
   "/example-2.png",
   "/example-3.png",
   "/example-4.png",
-  "/example-5.png",
-  "/example-6.png",
 ];

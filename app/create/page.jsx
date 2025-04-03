@@ -7,11 +7,9 @@ import LogoIdea from "./_components/logo-idea";
 import { useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 const CreateLogo = () => {
-  const router = useRouter();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     title: "",
@@ -38,7 +36,7 @@ const CreateLogo = () => {
         setStep(step + 1);
       } else {
         localStorage.setItem("logo", JSON.stringify(formData));
-        router.push("/result");
+        window.location.href = "/result";
       }
     }
   };

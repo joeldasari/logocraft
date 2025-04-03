@@ -7,9 +7,7 @@ const Provider = ({ children }) => {
   return (
     <>
       <Header />
-      <div className="min-h-[80vh] h-max py-8 md:py-16 xl:py-24 px-8">
-        {children}
-      </div>
+      <div className="min-h-[80vh] h-max py-8 px-8">{children}</div>
       <Footer />
     </>
   );

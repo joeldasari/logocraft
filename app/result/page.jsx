@@ -14,7 +14,7 @@ const ResultPage = () => {
 
   useEffect(() => {
     const userInput = JSON.parse(localStorage.getItem("logo"));
-    const prompt = `Create a ${userInput.design} for ${userInput.title}. The logo should incorporate ${userInput.idea}, and the color palette should include ${userInput.palette} tones.  The logo should also include the text '${userInput.title}' in a bold and readable font. The design should be professional and visually appealing, capturing the essence of the brand.`;
+    const prompt = `Create a ${userInput.design} logo for ${userInput.title}. Make ${userInput.idea} the main focus, bold and eye-catching. Use ${userInput.palette} colors that match and fit the brand. Add the text '${userInput.title}' in a clear, bold font. Keep it simple, professional, and good for all branding needs.`;
     const getLogo = async () => {
       try {
         setLoading(true);
