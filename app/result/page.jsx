@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { useUser } from "@clerk/nextjs";
 import axios from "axios";
 import { ArrowRight, Download, LoaderCircle } from "lucide-react";
 import Link from "next/link";
@@ -8,16 +9,21 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 const ResultPage = () => {
+  const { user } = useUser();
   const [imageSrc, setImageSrc] = useState("");
   const [loading, setLoading] = useState(false);
   const [seconds, setSeconds] = useState(0);
 
   useEffect(() => {
     const userInput = JSON.parse(localStorage.getItem("logo"));
-    const prompt = `Create a ${userInput.design} logo with the text "${userInput.title}". The design should visually represent the idea: ${userInput.idea}. Use a ${userInput.palette} color palette.`;
+
     const getLogo = async () => {
+      if (!user) return;
+      setLoading(true);
+
       try {
-        setLoading(true);
+        const prompt = `Create a ${userInput.design} logo with the text "${userInput.title}". The design should visually represent the idea: ${userInput.idea}. Use a ${userInput.palette} color palette.`;
+
         const response = await axios.post(
           "https://router.huggingface.co/hf-inference/models/stabilityai/stable-diffusion-3-medium-diffusers",
           { inputs: prompt },
@@ -28,20 +34,24 @@ const ResultPage = () => {
             responseType: "blob",
           }
         );
-        const data = await response.data;
-        const blobUrl = URL.createObjectURL(data);
-        console.log(blobUrl);
+
+        const blobUrl = URL.createObjectURL(response.data);
         setImageSrc(blobUrl);
-        toast.success("Logo generated successfully");
+
+        await axios.post("/api/saveLogo", {
+          userId: user.id,
+          logoUrl: blobUrl,
+        });
+        localStorage.removeItem("logo");
       } catch (error) {
-        toast.error("Failed to generate Logo");
-        console.log(error.message);
+        console.error("Logo generation failed", error);
       } finally {
         setLoading(false);
       }
     };
-    getLogo();
-  }, []);
+
+    if (userInput && user) getLogo();
+  }, [user]);
 
   useEffect(() => {
     let timer;

@@ -1,4 +1,11 @@
 import { Button } from "@/components/ui/button";
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  SignUpButton,
+  UserButton,
+} from "@clerk/nextjs";
 import { ArrowRight } from "lucide-react";
 import { Alfa_Slab_One } from "next/font/google";
 import Link from "next/link";
@@ -21,11 +28,28 @@ const Header = () => {
           </span>
         </h1>
       </Link>
-      <Link href="/create">
-        <Button className="cursor-pointer h-10">
-          Sign In <ArrowRight />
+      <SignedOut>
+        <Button className="cursor-pointer" asChild>
+          <SignInButton />
         </Button>
-      </Link>
+      </SignedOut>
+      <SignedIn>
+        <div className="flex gap-4">
+          <Link href="/dashboard">
+            <Button className="cursor-pointer">Dashboard</Button>
+          </Link>
+          <UserButton
+            appearance={{
+              elements: {
+                userButtonAvatarBox: {
+                  width: "36px", // Adjust size
+                  height: "36px",
+                },
+              },
+            }}
+          />
+        </div>
+      </SignedIn>
     </div>
   );
 };
