@@ -35,22 +35,22 @@ const ResultPage = () => {
           }
         );
 
+        let base64data;
         const reader = new FileReader();
         reader.readAsDataURL(response.data);
-        let base64data;
-        reader.onloadend = () => {
+        reader.onloadend = async () => {
           base64data = reader.result;
           setImageSrc(base64data);
+          await axios.post("/api/saveLogo", {
+            userId: user.id,
+            logoUrl: base64data,
+          });
+
+          setLoading(false);
+          toast.success("Logo generated successfully");
+
+          localStorage.removeItem("logo");
         };
-
-        setLoading(false);
-        toast.success("Logo generated successfully");
-
-        await axios.post("/api/saveLogo", {
-          userId: user.id,
-          logoUrl: base64data,
-        });
-        localStorage.removeItem("logo");
       } catch (error) {
         console.error("Logo generation failed", error);
       }

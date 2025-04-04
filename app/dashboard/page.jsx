@@ -4,21 +4,29 @@ import { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
-import { Download } from "lucide-react";
+import { Download, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 const DashboardPage = () => {
   const { user } = useUser();
   const [logos, setLogos] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!user) return;
+    const fetchLogos = async () => {
+      if (!user) return;
+      try {
+        setLoading(true);
+        const response = await axios.get(`/api/getLogos?userId=${user.id}`);
+        setLogos(response.data.logos);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    axios
-      .get(`/api/getLogos?userId=${user.id}`)
-      .then(({ data }) => {
-        setLogos(data.logos);
-      })
-      .catch(console.error);
+    fetchLogos();
   }, [user]);
 
   const handleDownload = (imageSrc) => {
@@ -29,10 +37,19 @@ const DashboardPage = () => {
     toast.success("Logo downloaded successfully");
   };
 
+  if (!user) {
+    return (
+      <div className="flex justify-center items-center">
+        <Loader2 className="size-10 animate-spin" />
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col items-center gap-4">
       <h1 className="text-xl font-bold">Your Logos</h1>
-      {logos.length ? (
+
+      {!loading && logos.length > 0 ? (
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           {logos.map((logo, index) => (
             <div key={index} className="flex flex-col gap-4">
@@ -45,6 +62,10 @@ const DashboardPage = () => {
               </Button>
             </div>
           ))}
+        </div>
+      ) : loading ? (
+        <div className="flex justify-center items-center">
+          <Loader2 className="size-10 animate-spin" />
         </div>
       ) : (
         <p>No logos generated yet.</p>
