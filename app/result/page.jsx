@@ -84,7 +84,11 @@ const ResultPage = () => {
       <div className="flex flex-col gap-4">
         {imageSrc ? (
           <div className="flex flex-col gap-4">
-            <img src={imageSrc} className="h-80 rounded-2xl" alt="logo" />
+            <img
+              src={imageSrc}
+              className="h-80 rounded-2xl border-2"
+              alt="logo"
+            />
             <div className="flex justify-between">
               <Button onClick={handleDownload} className="cursor-pointer">
                 Download <Download />
