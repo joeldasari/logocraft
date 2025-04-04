@@ -46,14 +46,14 @@ const DashboardPage = () => {
   }
 
   return (
-    <div className="flex flex-col items-center gap-4">
+    <div className="flex flex-col items-center gap-4 padding">
       <h1 className="text-xl font-bold">Your Logos</h1>
 
       {!loading && logos.length > 0 ? (
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {logos.map((logo, index) => (
             <div key={index} className="flex flex-col gap-4">
-              <img src={logo} className="h-80 rounded-2xl border-2" />
+              <img src={logo} className="rounded-2xl border-2" />
               <Button
                 onClick={() => handleDownload(logo)}
                 className="cursor-pointer"
