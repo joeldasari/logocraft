@@ -35,8 +35,13 @@ const ResultPage = () => {
           }
         );
 
-        const blobUrl = URL.createObjectURL(response.data);
-        setImageSrc(blobUrl);
+        const reader = new FileReader();
+        reader.readAsDataURL(response.data);
+        reader.onloadend = () => {
+          const base64data = reader.result;
+          setImageSrc(base64data);
+        };
+
         setLoading(false);
         toast.success("Logo generated successfully");
 
