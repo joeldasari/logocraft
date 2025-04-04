@@ -37,6 +37,8 @@ const ResultPage = () => {
 
         const blobUrl = URL.createObjectURL(response.data);
         setImageSrc(blobUrl);
+        setLoading(false);
+        toast.success("Logo generated successfully");
 
         await axios.post("/api/saveLogo", {
           userId: user.id,
@@ -45,8 +47,6 @@ const ResultPage = () => {
         localStorage.removeItem("logo");
       } catch (error) {
         console.error("Logo generation failed", error);
-      } finally {
-        setLoading(false);
       }
     };
 
