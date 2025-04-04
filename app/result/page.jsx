@@ -41,15 +41,14 @@ const ResultPage = () => {
         reader.onloadend = async () => {
           base64data = reader.result;
           setImageSrc(base64data);
+          setLoading(false);
+          toast.success("Logo generated successfully");
+          localStorage.removeItem("logo");
+
           await axios.post("/api/saveLogo", {
             userId: user.id,
             logoUrl: base64data,
           });
-
-          setLoading(false);
-          toast.success("Logo generated successfully");
-
-          localStorage.removeItem("logo");
         };
       } catch (error) {
         console.error("Logo generation failed", error);
