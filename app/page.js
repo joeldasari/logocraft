@@ -11,7 +11,7 @@ const Home = () => {
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {examples.map((example, index) => (
           <img
-            className="rounded-2xl"
+            className="rounded-2xl border-2"
             key={index}
             src={example}
             alt={`example-${index}`}

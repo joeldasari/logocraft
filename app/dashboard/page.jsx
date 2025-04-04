@@ -36,7 +36,7 @@ const DashboardPage = () => {
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           {logos.map((logo, index) => (
             <div key={index} className="flex flex-col gap-4">
-              <img src={logo} className="h-80 rounded-2xl" />
+              <img src={logo} className="h-80 rounded-2xl border-2" />
               <Button
                 onClick={() => handleDownload(logo)}
                 className="cursor-pointer"
