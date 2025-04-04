@@ -37,8 +37,9 @@ const ResultPage = () => {
 
         const reader = new FileReader();
         reader.readAsDataURL(response.data);
+        let base64data;
         reader.onloadend = () => {
-          const base64data = reader.result;
+          base64data = reader.result;
           setImageSrc(base64data);
         };
 
@@ -47,7 +48,7 @@ const ResultPage = () => {
 
         await axios.post("/api/saveLogo", {
           userId: user.id,
-          logoUrl: blobUrl,
+          logoUrl: base64data,
         });
         localStorage.removeItem("logo");
       } catch (error) {
