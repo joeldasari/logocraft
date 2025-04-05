@@ -79,7 +79,7 @@ const ResultPage = () => {
   return (
     <div className="flex flex-col gap-4 justify-center items-center">
       {loading && (
-        <p>The logo will be generated anywhere between 10 to 30 seconds</p>
+        <p className="px-4">The logo will be generated anywhere between 10 to 30 seconds</p>
       )}
       <div className="flex flex-col gap-4">
         {imageSrc ? (
