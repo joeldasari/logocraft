@@ -24,40 +24,52 @@ const ResultPage = () => {
       try {
         const prompt = `Create a ${userInput.design} logo with the text "${userInput.title}". The design should visually represent the idea: ${userInput.idea}. Use a ${userInput.palette} color palette.`;
 
-        const response = await axios.post(
-          "https://router.huggingface.co/hf-inference/models/stabilityai/stable-diffusion-3-medium-diffusers",
-          { inputs: prompt },
+        const payload = {
+          prompt,
+          output_format: "jpeg",
+          model: "sd3.5-flash",
+        };
+
+        const response = await axios.postForm(
+          "https://api.stability.ai/v2beta/stable-image/generate/sd3",
+          axios.toFormData(payload, new FormData()),
           {
+            validateStatus: undefined,
+            responseType: "arraybuffer",
             headers: {
-              Authorization: `Bearer ${process.env.NEXT_PUBLIC_HUGGINGFACE_API_KEY}`,
+              Authorization: `Bearer ${process.env.NEXT_PUBLIC_STABILITY_API_KEY}`,
+              Accept: "image/*",
             },
-            responseType: "blob",
-          }
+          },
         );
 
-        let base64data;
-        const reader = new FileReader();
-        reader.readAsDataURL(response.data);
-        reader.onloadend = async () => {
-          base64data = reader.result;
-          setImageSrc(base64data);
-          setLoading(false);
-          toast.success("Logo generated successfully");
-          localStorage.removeItem("logo");
+        if (response.status !== 200) {
+          throw new Error(
+            `${response.status}: ${Buffer.from(response.data).toString()}`,
+          );
+        }
 
-          await axios.post("/api/saveLogo", {
-            userId: user.id,
-            logoUrl: base64data,
-          });
-        };
+        // Convert arraybuffer → base64 data URL (replaces FileReader blob approach)
+        const base64 = Buffer.from(response.data).toString("base64");
+        const base64data = `data:image/jpeg;base64,${base64}`;
+
+        setImageSrc(base64data);
+        setLoading(false);
+        toast.success("Logo generated successfully");
+        localStorage.removeItem("logo");
+
+        await axios.post("/api/saveLogo", {
+          userId: user.id,
+          logoUrl: base64data,
+        });
       } catch (error) {
         console.error("Logo generation failed", error);
+        setLoading(false);
       }
     };
 
     if (userInput && user) getLogo();
   }, [user]);
-
   useEffect(() => {
     let timer;
     if (loading) {
